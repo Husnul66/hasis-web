@@ -5,6 +5,7 @@ import Features from "@/components/Features";
 import Services from "@/components/Services";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton"; // BURASI İMPORT EDİLMİŞ OLMALI
+import ChatBot from "@/components/ChatBot";
 
 export default function Home() {
   return (
@@ -15,7 +16,8 @@ export default function Home() {
       <Features />
       <Services />
       <Footer />
-      <WhatsAppButton /> {/* BURASI EKLENMİŞ OLMALI */}
+      <WhatsAppButton /> 
+      <ChatBot />
     </main>
   );
 }

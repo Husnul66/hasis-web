@@ -3,8 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 import database
+import google.generativeai as genai
 
-# Veritabanı tablolarını oluştur (Eğer yoksa hasis.db dosyasını yaratır)
+# Veritabanı tablolarını oluştur
 database.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI(title="Hasis İnşaat API")
@@ -17,7 +18,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Veritabanı oturumu açma/kapatma fonksiyonu
 def get_db():
     db = database.SessionLocal()
     try:
@@ -25,14 +25,12 @@ def get_db():
     finally:
         db.close()
 
-# Admin panelinden gelecek verileri doğrulama şeması (Pydantic)
 class ContactUpdate(BaseModel):
     phone: str
     email: str
     address: str
     whatsapp: str
 
-# İlk kurulumda veritabanı boşsa varsayılan veriyi ekleyen yardımcı fonksiyon
 def init_default_contact(db: Session):
     contact = db.query(database.ContactInfo).first()
     if not contact:
@@ -45,8 +43,7 @@ def init_default_contact(db: Session):
 
 @app.get("/api/contact")
 def get_contact_info(db: Session = Depends(get_db)):
-    contact = init_default_contact(db)
-    return contact
+    return init_default_contact(db)
 
 @app.put("/api/contact")
 def update_contact_info(data: ContactUpdate, db: Session = Depends(get_db)):
@@ -54,7 +51,6 @@ def update_contact_info(data: ContactUpdate, db: Session = Depends(get_db)):
     if not contact:
         contact = init_default_contact(db)
 
-    # Gelen yeni verileri veritabanı objesine aktarıyoruz
     contact.phone = data.phone
     contact.email = data.email
     contact.address = data.address
@@ -63,3 +59,52 @@ def update_contact_info(data: ContactUpdate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(contact)
     return {"message": "İletişim bilgileri başarıyla güncellendi", "data": contact}
+
+# --- SİLİNEN LOGIN UÇ NOKTASI GERİ EKLENDİ ---
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+@app.post("/api/login")
+def login(request: LoginRequest):
+    if request.username == "admin" and request.password == "hasis2026":
+        return {"token": "hasis-secure-token-999", "message": "Giriş başarılı"}
+    raise HTTPException(status_code=401, detail="Kullanıcı adı veya şifre hatalı")
+
+# --- GEMINI BOT AYARLARI ---
+# DİKKAT: Anahtar kesinlikle "AIza..." ile başlamalıdır! 
+# aistudio.google.com adresinden "Create API Key" diyerek almalısın.
+GEMINI_API_KEY = "AIzaSyCSH9WAVjqWHurDqGM3eVf7YY3THCO-rek" 
+
+# Boşlukları ve gizli karakterleri zorla temizliyoruz
+CLEAN_KEY = GEMINI_API_KEY.replace('"', '').replace("'", "").strip()
+genai.configure(api_key=CLEAN_KEY)
+
+class ChatRequest(BaseModel):
+    message: str
+
+@app.post("/api/chat")
+async def chat_with_bot(request: ChatRequest):
+    try:
+        print(f"--- YENİ MESAJ GELDİ: {request.message} ---")
+        
+        system_prompt = """
+        Sen Hasis İnşaat'ın resmi dijital asistanısın. 
+        Kullanıcılara nazikçe yardımcı ol. Şirket inşaat, lojistik, nakliye, 
+        madencilik ve enerji alanlarında hizmet veriyor. 
+        Sorulara kısa, net ve kurumsal bir dille cevap ver.
+        """
+        
+        # MANTIK HATASI DÜZELTİLDİ: Sadece anahtarın geçerli bir uzunlukta olup olmadığına bakıyoruz
+        if len(CLEAN_KEY) < 25:
+             return {"reply": "🤖 Asistan: Sistem yöneticisi henüz geçerli bir API anahtarı tanımlamadı."}
+
+        model = genai.GenerativeModel('gemini-2.5-flash')
+        response = model.generate_content(f"{system_prompt}\n\nMüşteri: {request.message}")
+        
+        print(f"--- BOT YANITI: {response.text} ---")
+        return {"reply": response.text}
+        
+    except Exception as e:
+        print(f"!!! KRİTİK GEMINI HATASI: {str(e)} !!!")
+        raise HTTPException(status_code=500, detail=str(e))
