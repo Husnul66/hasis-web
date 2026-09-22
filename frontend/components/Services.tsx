@@ -1,4 +1,5 @@
 import { FaArrowRight, FaChevronDown } from 'react-icons/fa';
+import Link from 'next/link';
 
 export default function Services() {
   const services = [
@@ -12,7 +13,8 @@ export default function Services() {
       title: "Akaryakıt",
       subtitle: "Hizmet Alt Başlığı",
       description: "2015 yılından bu yana akaryakıt sektöründe lider bir konumda olan Hasis İnşaat, yenilikçi ve sürdürülebilir yaklaşımlarıyla akaryakıt tedariğinde çevre dostu ve yüksek performanslı çözümler sunar.",
-      imageUrl: "https://images.unsplash.com/photo-1555529733-0e670560f8e1?auto=format&fit=crop&w=150&q=80"
+      // Akaryakıt görseli yenilendi (Çalışan güvenilir bir link)
+      imageUrl: "https://images.unsplash.com/photo-1610499092404-7c3a033fcd98?auto=format&fit=crop&w=150&q=80"
     },
     {
       title: "Enerji",
@@ -24,7 +26,8 @@ export default function Services() {
       title: "Nakliye",
       subtitle: "Hizmet Alt Başlığı",
       description: "2010 yılından bu yana nakliye alanında derinleşen bilgi birikimi ve zengin tecrübesiyle, yüklerinizin taşınmasını sadece bir transfer olarak görmeyip, maksimum güvenlik, hız ve verimlilik sağlıyoruz.",
-      imageUrl: "https://images.unsplash.com/photo-1586528116311-ad8ed7c15908?auto=format&fit=crop&w=150&q=80"
+      // Nakliye görseli yenilendi (Çalışan güvenilir bir link)
+      imageUrl: "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=150&q=80"
     },
     {
       title: "İnşaat",
@@ -41,7 +44,8 @@ export default function Services() {
   ];
 
   return (
-    <section className="py-16 px-4 md:px-8 max-w-7xl mx-auto">
+    // Menüden tıklandığında buraya kayması için id eklendi
+    <section id="hizmetlerimiz" className="py-16 px-4 md:px-8 max-w-7xl mx-auto">
       {/* Kartlar Grid Yapısı */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {services.map((service, index) => (
@@ -52,14 +56,14 @@ export default function Services() {
               <img 
                 src={service.imageUrl} 
                 alt={service.title} 
-                className="w-16 h-16 rounded-lg object-cover border-2 border-blue-400"
+                className="w-16 h-16 rounded-lg object-cover border-2 border-blue-400 bg-blue-100"
               />
               <div className="text-white">
                 <h3 className="text-xl font-bold">{service.title}</h3>
                 <p className="text-sm text-blue-200">{service.subtitle}</p>
               </div>
               
-              {/* Aktif Hizmet Etiketi (Dışarı Taşan Badge) */}
+              {/* Aktif Hizmet Etiketi */}
               <div className="absolute -bottom-3 right-4 bg-blue-500 text-white text-xs font-semibold py-1 px-3 rounded-full border-2 border-white shadow-sm">
                 • Aktif Hizmet
               </div>
@@ -72,12 +76,14 @@ export default function Services() {
               </p>
             </div>
 
-            {/* Alt Buton Alanı */}
+            {/* Alt Buton Alanı - Link eklendi */}
             <div className="px-6 pb-6 mt-auto">
-              <button className="bg-[#111111] hover:bg-[#222222] text-white text-sm font-medium py-2.5 px-5 rounded-lg flex items-center gap-2 transition-colors">
-                <FaArrowRight className="text-xs" />
-                Hizmete Git
-              </button>
+              <Link href="#iletisim">
+                <button className="bg-[#111111] hover:bg-[#222222] text-white text-sm font-medium py-2.5 px-5 rounded-lg flex items-center gap-2 transition-colors w-max">
+                  <FaArrowRight className="text-xs" />
+                  Hizmete Git
+                </button>
+              </Link>
             </div>
           </div>
         ))}

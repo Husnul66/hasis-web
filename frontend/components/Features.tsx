@@ -20,8 +20,8 @@ export default function Features() {
   ];
 
   return (
-    // Yüzen kart efekti için negatif margin (-mt-12) ve gölge (shadow-xl) kullanıyoruz
-    <section className="relative z-20 max-w-7xl mx-auto px-4 md:px-8 -mt-12 mb-16">
+    // Sayfa içi kaydırma hedefi için id="hakkimizda" eklendi. Üstten biraz boşluk bırakmak için scroll-margin eklendi (scroll-mt-24).
+    <section id="hakkimizda" className="relative z-20 max-w-7xl mx-auto px-4 md:px-8 -mt-12 mb-16 scroll-mt-24">
       <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-10 border border-gray-100">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           

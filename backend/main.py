@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 import database
 import google.generativeai as genai
+import os
 
 # Veritabanı tablolarını oluştur
 database.Base.metadata.create_all(bind=database.engine)
@@ -60,7 +61,7 @@ def update_contact_info(data: ContactUpdate, db: Session = Depends(get_db)):
     db.refresh(contact)
     return {"message": "İletişim bilgileri başarıyla güncellendi", "data": contact}
 
-# --- SİLİNEN LOGIN UÇ NOKTASI GERİ EKLENDİ ---
+# --- LOGIN UÇ NOKTASI ---
 class LoginRequest(BaseModel):
     username: str
     password: str
@@ -71,14 +72,14 @@ def login(request: LoginRequest):
         return {"token": "hasis-secure-token-999", "message": "Giriş başarılı"}
     raise HTTPException(status_code=401, detail="Kullanıcı adı veya şifre hatalı")
 
-# --- GEMINI BOT AYARLARI ---
-# DİKKAT: Anahtar kesinlikle "AIza..." ile başlamalıdır! 
-# aistudio.google.com adresinden "Create API Key" diyerek almalısın.
-GEMINI_API_KEY = "AIzaSyCSH9WAVjqWHurDqGM3eVf7YY3THCO-rek" 
+# --- GEMINI BOT AYARLARI (GÜVENLİ HALE GETİRİLDİ) ---
+# API anahtarı artık koddan değil, sunucunun gizli ortam değişkenlerinden çekiliyor.
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "GIZLI_ANAHTAR") 
 
-# Boşlukları ve gizli karakterleri zorla temizliyoruz
 CLEAN_KEY = GEMINI_API_KEY.replace('"', '').replace("'", "").strip()
-genai.configure(api_key=CLEAN_KEY)
+
+if CLEAN_KEY != "GIZLI_ANAHTAR":
+    genai.configure(api_key=CLEAN_KEY)
 
 class ChatRequest(BaseModel):
     message: str
@@ -95,9 +96,8 @@ async def chat_with_bot(request: ChatRequest):
         Sorulara kısa, net ve kurumsal bir dille cevap ver.
         """
         
-        # MANTIK HATASI DÜZELTİLDİ: Sadece anahtarın geçerli bir uzunlukta olup olmadığına bakıyoruz
-        if len(CLEAN_KEY) < 25:
-             return {"reply": "🤖 Asistan: Sistem yöneticisi henüz geçerli bir API anahtarı tanımlamadı."}
+        if CLEAN_KEY == "GIZLI_ANAHTAR" or len(CLEAN_KEY) < 25:
+             return {"reply": "🤖 Asistan: Sistem yöneticisi henüz geçerli bir API anahtarı tanımlamadı. (Lütfen .env veya Render ayarlarına GEMINI_API_KEY ekleyin)"}
 
         model = genai.GenerativeModel('gemini-2.5-flash')
         response = model.generate_content(f"{system_prompt}\n\nMüşteri: {request.message}")

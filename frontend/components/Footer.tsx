@@ -23,7 +23,8 @@ export default async function Footer() {
   const contact = await getContactInfo();
 
   return (
-    <footer className="bg-[#1a1a2e] text-gray-300 pt-16 pb-8 border-t border-gray-800">
+    // id="iletisim" eklendi!
+    <footer id="iletisim" className="bg-[#1a1a2e] text-gray-300 pt-16 pb-8 border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
         
         {/* Şirket Özeti */}
@@ -53,14 +54,13 @@ export default async function Footer() {
           <h4 className="text-white font-bold text-lg mb-4">Hızlı Menü</h4>
           <ul className="space-y-2 text-sm">
             <li><Link href="/" className="hover:text-white transition-colors">Ana Sayfa</Link></li>
-            <li><Link href="/kurumsal" className="hover:text-white transition-colors">Hakkımızda</Link></li>
-            <li><Link href="/hizmetler" className="hover:text-white transition-colors">Hizmetlerimiz</Link></li>
-            <li><Link href="/projeler" className="hover:text-white transition-colors">Projelerimiz</Link></li>
-            <li><Link href="/iletisim" className="hover:text-white transition-colors">İletişim</Link></li>
+            <li><Link href="#hakkimizda" className="hover:text-white transition-colors">Hakkımızda</Link></li>
+            <li><Link href="#hizmetlerimiz" className="hover:text-white transition-colors">Hizmetlerimiz</Link></li>
+            <li><Link href="#iletisim" className="hover:text-white transition-colors">İletişim</Link></li>
           </ul>
         </div>
 
-        {/* Hizmet Alanları */}
+        {/* Faaliyet Alanları */}
         <div>
           <h4 className="text-white font-bold text-lg mb-4">Faaliyet Alanları</h4>
           <ul className="space-y-2 text-sm text-gray-400">

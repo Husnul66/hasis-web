@@ -1,4 +1,5 @@
 import { ChevronRight, CheckCircle2 } from "lucide-react";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -13,14 +14,19 @@ export default function Hero() {
           Yılların getirdiği tecrübe ile inşaat, lojistik, madencilik, enerji ve teknoloji gibi geniş bir yelpazede hizmet sunuyoruz. Her projemizde sürdürülebilirliği ve inovasyonu merkeze alarak, yüksek kalite standartlarımızla sektörde yenilikçi çözümler üretiyoruz.
         </p>
         <div className="flex flex-wrap gap-4">
-          <button className="flex items-center gap-2 bg-transparent border-2 border-gray-300 text-gray-700 font-semibold py-2.5 px-6 rounded-lg hover:border-blue-600 hover:text-blue-600 transition-colors">
+          
+          {/* Button yerine Link bileşenine çevrildi ve href="#hakkimizda" eklendi */}
+          <Link href="#hakkimizda" className="flex items-center gap-2 bg-transparent border-2 border-gray-300 text-gray-700 font-semibold py-2.5 px-6 rounded-lg hover:border-blue-600 hover:text-blue-600 transition-colors">
             <ChevronRight className="w-5 h-5"/>
             Hakkımızda
-          </button>
-          <button className="flex items-center gap-2 bg-blue-600 text-white font-semibold py-2.5 px-6 rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200">
+          </Link>
+          
+          {/* Button yerine Link bileşenine çevrildi ve href="#hizmetlerimiz" eklendi */}
+          <Link href="#hizmetlerimiz" className="flex items-center gap-2 bg-blue-600 text-white font-semibold py-2.5 px-6 rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200">
             <CheckCircle2 className="w-5 h-5"/>
             Hizmetlerimiz
-          </button>
+          </Link>
+          
         </div>
       </div>
 
