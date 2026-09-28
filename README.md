@@ -69,10 +69,21 @@ npm install
 # Geliştirici sunucusunu başlatın (http://localhost:3000)
 npm run dev
 
-Metot,Uç Nokta,Açıklama,Kimlik Doğrulama
-GET,/,Sunucu sağlık durumu (Health check),Gerekmez
-GET,/api/contact,İletişim bilgilerini getirir,Gerekmez
-PUT,/api/contact,İletişim bilgilerini günceller,Yönetici
-POST,/api/login,Yönetici paneline giriş (JWT Token),Gerekmez
-POST,/api/chat,Gemini AI'a mesaj gönderir,Gerekmez
+
+<img width="1327" height="624" alt="image" src="https://github.com/user-attachments/assets/2af3aebe-cc31-4094-9ad4-63e57427243e" />
+
+<img width="1279" height="321" alt="image" src="https://github.com/user-attachments/assets/cfd509f3-3a0b-4a2b-84c7-fc1a258d9601" />
+
+<img width="1320" height="608" alt="image" src="https://github.com/user-attachments/assets/0192e208-1c2d-4681-8ef9-6124d322244d" />
+
+<img width="1208" height="294" alt="image" src="https://github.com/user-attachments/assets/4cc6da26-4de0-4aff-9964-8ce72061e522" />
+
+<img width="411" height="523" alt="image" src="https://github.com/user-attachments/assets/46004294-92a7-435f-ae93-7c8e4510dba6" />
+
+<img width="815" height="628" alt="image" src="https://github.com/user-attachments/assets/17f1a71c-a595-4d2c-95a0-9425d4454bd2" />
+
+
+
+
+
 
