@@ -5,19 +5,28 @@ from pydantic import BaseModel
 import database
 import google.generativeai as genai
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Veritabanı tablolarını oluştur
 database.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI(title="Hasis İnşaat API")
 
+# CANLI SUNUCU GÜNCELLEMESİ: Vercel'den gelen isteklere izin vermek için origins "*" yapıldı
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Render sunucusunun API'nin ayakta olduğunu anlaması için kontrol noktası
+@app.get("/")
+def health_check():
+    return {"status": "Hasis İnşaat API aktif ve çalışıyor!"}
 
 def get_db():
     db = database.SessionLocal()
@@ -72,8 +81,7 @@ def login(request: LoginRequest):
         return {"token": "hasis-secure-token-999", "message": "Giriş başarılı"}
     raise HTTPException(status_code=401, detail="Kullanıcı adı veya şifre hatalı")
 
-# --- GEMINI BOT AYARLARI (GÜVENLİ HALE GETİRİLDİ) ---
-# API anahtarı artık koddan değil, sunucunun gizli ortam değişkenlerinden çekiliyor.
+# --- GEMINI BOT AYARLARI ---
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "GIZLI_ANAHTAR") 
 
 CLEAN_KEY = GEMINI_API_KEY.replace('"', '').replace("'", "").strip()

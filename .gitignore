@@ -5,4 +5,5 @@ frontend/.next/
 # Backend
 backend/venv/
 backend/__pycache__/
-*.db
+*.db.env
+backend/.env
